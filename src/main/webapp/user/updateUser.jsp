@@ -1,10 +1,9 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page import="com.model2.mvc.service.domain.User" %>
-
-<%
+<%--
 	User user=(User)request.getAttribute("user");
-%>
+--%>
 
 <html>
 <head>
@@ -54,7 +53,7 @@ function resetData() {
 
 <form name="detailForm"  method="post" >
 
-<input type="hidden" name="userId" value="<%=user.getUserId() %>" />
+<input type="hidden" name="userId" value="${user.userId }" />
 
 	<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 		<tr>
@@ -85,7 +84,7 @@ function resetData() {
 			아이디 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=user.getUserId() %></td>
+		<td class="ct_write01">${user.userId }</td>
 	</tr>
 	
 	<tr>
@@ -98,7 +97,7 @@ function resetData() {
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input 	type="text" name="userName" value="<%=user.getUserName() %>" class="ct_input_g" 
+			<input 	type="text" name="userName" value="${user.userName }" class="ct_input_g" 
 							style="width:100px; height:19px"  maxLength="50" />
 		</td>
 	</tr>
@@ -111,7 +110,7 @@ function resetData() {
 		<td width="104" class="ct_write">주소</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input 	type="text" name="addr" value="<%=user.getAddr() %>" class="ct_input_g" 
+			<input 	type="text" name="addr" value="${user.addr }" class="ct_input_g" 
 							style="width:370px; height:19px"  maxLength="100">
 		</td>
 	</tr>
@@ -125,27 +124,18 @@ function resetData() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
 			<select 	name="phone1" class="ct_input_g" style="width:50px; height:20px" 
-							onChange="document.detailForm.phone2.focus();">
-				<%
-					String phone1 = "";
-					String phone2 = "";
-					String phone3 = "";
-					if( user.getPhone() != null){
-						phone1 = user.getPhone().split("-")[0] ;
-						phone2 = user.getPhone().split("-")[1] ;
-						phone3 = user.getPhone().split("-")[2] ;
-					}
-				%>							
-				<option value="010" <%= phone1.equals("010") ? "selected" : "" %> >010</option>
-				<option value="011" <%= phone1.equals("011") ? "selected" : "" %> >011</option>
-				<option value="016" <%= phone1.equals("016") ? "selected" : "" %> >016</option>
-				<option value="018" <%= phone1.equals("018") ? "selected" : "" %> >018</option>
-				<option value="019" <%= phone1.equals("019") ? "selected" : "" %> >019</option>
+							onChange="document.detailForm.phone1.focus();">
+											
+				<option value="010" ${ ! empty user.phone1 && user.phone1 == "010" ? "selected" : ''  } >010</option>
+				<option value="011" ${ ! empty user.phone1 && user.phone1 == "011" ? "selected" : ''  } >011</option>
+				<option value="016" ${ ! empty user.phone1 && user.phone1 == "016" ? "selected" : ''  } >016</option>
+				<option value="018" ${ ! empty user.phone1 && user.phone1 == "018" ? "selected" : ''  } >018</option>
+				<option value="019" ${ ! empty user.phone1 && user.phone1 == "019" ? "selected" : ''  } >019</option>
 			</select>
-			<input 	type="text" name="phone2" value="<%= phone2.equals("")? "" : phone2 %>" 
+			<input 	type="text" name="phone2" value="${!empty user.phone2 ? user.phone2 : '' }" 
 							class="ct_input_g" style="width:100px; height:19px"  maxLength="9" >
 			- 
-			<input 	type="text" name="phone3" value="<%= phone3.equals("")? "" : phone3 %>"  
+			<input 	type="text" name="phone3" value="${! empty user.phone3 ? user.phone3 : '' }"  
 							class="ct_input_g"  style="width:100px; height:19px"  maxLength="9" >
 			<input type="hidden" name="phone" class="ct_input_g"  />
 		</td>
@@ -159,7 +149,7 @@ function resetData() {
 		<td width="104" class="ct_write">이메일 </td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="email" value="<%=user.getEmail() %>" class="ct_input_g" 
+			<input		type="text" name="email" value="${user.email }" class="ct_input_g" 
 							style="width:100px; height:19px" onChange="check_email(this.form);" />
 		</td>
 	</tr>

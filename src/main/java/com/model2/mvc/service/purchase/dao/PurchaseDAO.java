@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +15,9 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.common.util.*;
 import com.model2.mvc.service.purchase.PurchaseService;
 import com.model2.mvc.service.purchase.impl.PurchaseServiceImpl;
+import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
+import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
@@ -99,5 +103,77 @@ public class PurchaseDAO {
 		return null;
 	}
 	
+	public Map<String, Object> getPurchaseList(Search search, String userId) throws Exception {
+		// TODO Auto-generated method stub
+		
+		Map<String , Object>  map = new HashMap<String, Object>();
+		
+		Connection con = DBUtil.getConnection();
+		
+		System.out.println("======db연결은해?");
+		
+		String sql = "select * from transaction ";
+			sql += "where buyer_id='"+userId+"'";
+		
+		System.out.println("PurchaseDAO:: SQL :: "+sql);
+		
+		int totalcount = this.getTotalCount(sql);
+		System.out.println("PurchaseDAO:: totalcount :: "+totalcount);
+		
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		ResultSet rs = pStmt.executeQuery();
+		//System.out.println("eeeeeeee2");
+		
+		//System.out.println("searchVO.getPage():" + search.getPage());
+		//System.out.println("searchVO.getPageUnit():" + search.getPageUnit());
+		List<Purchase> list = new ArrayList<Purchase>();
+		User user = null;
+		
+		UserService uservice = new UserServiceImpl();
+		user = uservice.getUser(userId);
+		System.out.println("user는 들어갔나?"+user);
+		while(rs.next()) {
+			Purchase purchase = new Purchase();
+			purchase.setBuyer(user);
+			purchase.setReceiverName(rs.getString("RECEIVER_NAME"));
+			purchase.setReceiverPhone(rs.getString("RECEIVER_PHONE"));
+			purchase.setTranCode(rs.getString("TRAN_STATUS_CODE"));
+			
+			list.add(purchase);
+		}
+		
+		map.put("totalCount", totalcount);
+		//System.out.println("DB에서 꺼내면 나오냐?"+map.get("totalCount"));
+		map.put("list", list);
+		System.out.println("listsize"+list.size());
+		
+		rs.close();
+		pStmt.close();
+		con.close();
+		
+		return map;
+	}
+	private int getTotalCount(String sql) throws Exception {
+		
+		sql = "SELECT COUNT(*) "+
+		          "FROM ( " +sql+ ") countTable";
+		
+		Connection con = DBUtil.getConnection();
+		PreparedStatement pStmt = con.prepareStatement(sql);
+		ResultSet rs = pStmt.executeQuery();
+		
+		int totalCount = 0;
+		if( rs.next() ){
+			totalCount = rs.getInt(1);
+		}
+		
+		pStmt.close();
+		con.close();
+		rs.close();
+		//System.out.println("메서드에서 꺼내기"+totalCount);
+		return totalCount;
+	}
 	
 }
+
+

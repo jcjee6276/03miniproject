@@ -1,8 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"%>
+
+<%@ page import="java.util.*" %>
+<%@ page import="com.model2.mvc.service.domain.*" %>
+<%@ page import="com.model2.mvc.common.*" %>
+<%@ page import="com.model2.mvc.common.util.*" %>
+<%@ page import="com.model2.mvc.view.user.*" %>
+<%
 
 
+List<Purchase> list= (List<Purchase>)request.getAttribute("list");
+Page resultPage=(Page)request.getAttribute("resultPage");
 
+Search search = (Search)request.getAttribute("search");
+//==> null 을 ""(nullString)으로 변경
+
+%>
 
 
 
@@ -16,7 +28,8 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-	function fncGetUserList() {
+	function fncGetPurchaseList(resultPage.getCurrentPage()) {
+		document.getElementById("resultPage.getCurrentPage()").value = resultPage.getCurrentPage();
 		document.detailForm.submit();
 	}
 </script>
@@ -44,7 +57,7 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
-		<td colspan="11">전체 7 건수, 현재 1 페이지</td>
+		<td colspan="11">전체 <%= resultPage.getTotalCount() %> 건수, 현재 <%= resultPage.getCurrentPage() %> 페이지</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
@@ -63,20 +76,24 @@
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
 
-	
-	
+	<%
+		int no = list.size();
+		for(int i=0; i<list.size(); i++){
+			Purchase vo = (Purchase)list.get(i);
+	%>
+	 
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/getPurchase.do?tranNo=10066">3</a>
+			<a href="/getPurchase.do?tranNo=<%=vo.getTranNo() %>"><%=i+1 %></a>
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/getUser.do?userId=user16">user16</a>
+			<a href="/getUser.do?userId=<%=vo.getBuyer().getUserId() %>"><%=vo.getBuyer().getUserId() %></a>
 		</td>
 		<td></td>
-		<td align="left">SCOTT</td>
+		<td align="left"><%=vo.getReceiverName() %></td>
 		<td></td>
-		<td align="left">null</td>
+		<td align="left"><%=vo.getReceiverPhone() %></td>
 		<td></td>
 		<td align="left">현재
 				
@@ -84,7 +101,7 @@
 				상태 입니다.</td>
 		<td></td>
 		<td align="left">
-			
+			<%} %>
 		</td>
 	</tr>
 	<tr>
@@ -92,58 +109,12 @@
 	</tr>
 	
 	
-	<tr class="ct_list_pop">
-		<td align="center">
-			<a href="/getPurchase.do?tranNo=10011">2</a>
-		</td>
-		<td></td>
-		<td align="left">
-			<a href="/getUser.do?userId=user16">user16</a>
-		</td>
-		<td></td>
-		<td align="left">SCOTT</td>
-		<td></td>
-		<td align="left">null</td>
-		<td></td>
-		<td align="left">현재
-				
-					배송완료
-				상태 입니다.</td>
-		<td></td>
-		<td align="left">
-			
-		</td>
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
 	
 	
-	<tr class="ct_list_pop">
-		<td align="center">
-			<a href="/getPurchase.do?tranNo=10018">1</a>
-		</td>
-		<td></td>
-		<td align="left">
-			<a href="/getUser.do?userId=user16">user16</a>
-		</td>
-		<td></td>
-		<td align="left">SCOTT</td>
-		<td></td>
-		<td align="left">null</td>
-		<td></td>
-		<td align="left">현재
-				
-					배송완료
-				상태 입니다.</td>
-		<td></td>
-		<td align="left">
-			
-		</td>
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
+	
+	
+	
+	
 	
 </table>
 
@@ -151,11 +122,22 @@
 	<tr>
 		<td align="center">
 		 
-			<a href="/listPurchase.do?page=1">1</a> 
-		 
-			<a href="/listPurchase.do?page=2">2</a> 
-		 
-			<a href="/listPurchase.do?page=3">3</a> 
+			<input type="hidden" id="currentPage" name="currentPage" value=""/>
+			<% if( resultPage.getCurrentPage() <= resultPage.getPageUnit() ){ %>
+					◀ 이전
+			<% }else{ %>
+					<a href="javascript:fncGetPurchaseList('<%=resultPage.getCurrentPage()-1%>')">◀ 이전</a>
+			<% } %>
+
+			<%	for(int i=resultPage.getBeginUnitPage();i<= resultPage.getEndUnitPage() ;i++){	%>
+					<a href="javascript:fncGetPurchaseList('<%=i %>');"><%=i %></a>
+			<% 	}  %>
+	
+			<% if( resultPage.getEndUnitPage() >= resultPage.getMaxPage() ){ %>
+					이후 ▶
+			<% }else{ %>
+					<a href="javascript:fncGetPurchaseList('<%=resultPage.getEndUnitPage()+1%>')">이후 ▶</a>
+			<% } %>
 		
 		</td>
 	</tr>

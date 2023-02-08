@@ -15,7 +15,7 @@ public class GetProductAction extends Action{
 		ProductService service = new ProductServiceImpl();
 		Product vo = service.getProduct(prodNo);
 		System.out.println(vo);
-		request.setAttribute("vo", vo);
+		request.setAttribute("prod", vo);
 		System.out.println(vo);
 		
 		

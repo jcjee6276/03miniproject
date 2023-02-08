@@ -18,10 +18,10 @@ public class ListUserAction extends Action {
 	public String execute(HttpServletRequest request,	HttpServletResponse response) throws Exception {
 
 		Search search=new Search();
+		System.out.println("먼저 읽어오기 "+(String[])(request.getParameterValues("currentPage")));
 		
 		int currentPage=1;
 		if(request.getParameter("currentPage")!=null &&!request.getParameter("currentPage").equals("")){
-			
 			currentPage=Integer.parseInt(request.getParameter("currentPage"));
 		}
 		

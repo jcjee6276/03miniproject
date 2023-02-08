@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"%>
 
-<%@ page import="com.model2.mvc.service.domain.*" %>
 
-<%
+<%--
 Product vo = (Product)request.getAttribute("vo");
-%>	
+--%>	
 
 
 
@@ -49,7 +48,7 @@ Product vo = (Product)request.getAttribute("vo");
 		<td class="ct_write01">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="105"><%=vo.getProdNo() %></td>
+					<td width="105">${prod.prodNo }</td>
 				</tr>
 			</table>
 		</td>
@@ -62,7 +61,7 @@ Product vo = (Product)request.getAttribute("vo");
 			상품명 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=vo.getProdName() %></td>
+		<td class="ct_write01">${prod.prodName }</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -84,7 +83,7 @@ Product vo = (Product)request.getAttribute("vo");
 			상품상세정보 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=vo.getProdDetail() %></td>
+		<td class="ct_write01">${prod.prodDetail }</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -92,7 +91,7 @@ Product vo = (Product)request.getAttribute("vo");
 	<tr>
 		<td width="104" class="ct_write">제조일자</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=vo.getManuDate() %></td>
+		<td class="ct_write01">${prod.manuDate }</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -100,7 +99,7 @@ Product vo = (Product)request.getAttribute("vo");
 	<tr>
 		<td width="104" class="ct_write">가격</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=vo.getPrice() %></td>
+		<td class="ct_write01">${prod.price }</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -108,7 +107,7 @@ Product vo = (Product)request.getAttribute("vo");
 	<tr>
 		<td width="104" class="ct_write">등록일자</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><%=vo.getRegDate() %></td>
+		<td class="ct_write01">${prod.regDate }</td>
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -126,7 +125,7 @@ Product vo = (Product)request.getAttribute("vo");
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="/addPurchaseView.do?prodNo=<%=vo.getProdNo()%>">구매</a>
+					<a href="/addPurchaseView.do?prodNo=${prod.prodNo }">구매</a>
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">

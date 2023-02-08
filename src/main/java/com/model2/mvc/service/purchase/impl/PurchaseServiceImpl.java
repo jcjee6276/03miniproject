@@ -38,16 +38,16 @@ public class PurchaseServiceImpl implements PurchaseService{
 		// TODO Auto-generated method stub
 		 purchaseDAO.insertPurchase(purchase);
 	}
-
-
+	
+	
 	@Override
-	public Map<String, Object> getPurchaseList(Search searchVO, String string) throws Exception {
+	public Map<String, Object> getPurchaseList(Search search, String string) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return purchaseDAO.getPurchaseList(search, string);
 	}
 
 	@Override
-	public Map<String, Object> getSaleList(Search searchvo) throws Exception {
+	public Map<String, Object> getSaleList(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
