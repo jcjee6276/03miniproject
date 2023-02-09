@@ -17,11 +17,13 @@ import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.impl.UserServiceImpl;
 import com.model2.mvc.framework.Action;
 
-public class GetPurchase extends Action{
+public class GetPurchaseAction extends Action{
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 	
-		//int tranNo = request.getParameter("tranNo")
+		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
+		System.out.println("tranNo : "+tranNo);
 		
-		return null;
+		
+		return "forward:/purchase/getPurchase.jsp";
 	}
 }
