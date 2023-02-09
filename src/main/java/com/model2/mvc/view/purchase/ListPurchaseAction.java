@@ -1,5 +1,6 @@
 package com.model2.mvc.view.purchase;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.framework.Action;
 import com.model2.mvc.service.domain.User;
+import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 import com.model2.mvc.service.purchase.PurchaseService;
@@ -38,6 +40,8 @@ public class ListPurchaseAction extends Action {
 		PurchaseService purservice = new PurchaseServiceImpl();
 		Map<String,Object> map = purservice.getPurchaseList(search, userId);
 		//System.out.println("map ³ª¿Í?"+(map.get("totalCount")));
+		//List<Purchase> list = (List<Purchase>)request.getAttribute("list");
+		
 		
 		Page resultPage	= new Page( currentPage, ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		System.out.println("ListProductAction ::"+resultPage);
@@ -45,6 +49,7 @@ public class ListPurchaseAction extends Action {
 		request.setAttribute("list", map.get("list"));
 		request.setAttribute("resultPage", resultPage);
 		request.setAttribute("search", search);
+		
 		
 		
 		return "forward:/purchase/listPurchase.jsp";

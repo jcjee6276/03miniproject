@@ -137,7 +137,7 @@ public class PurchaseDAO {
 			purchase.setBuyer(user);
 			purchase.setReceiverName(rs.getString("RECEIVER_NAME"));
 			purchase.setReceiverPhone(rs.getString("RECEIVER_PHONE"));
-			purchase.setTranCode(rs.getString("TRAN_STATUS_CODE"));
+			purchase.setTranNo(rs.getInt("TRAN_NO"));
 			
 			list.add(purchase);
 		}
@@ -146,6 +146,8 @@ public class PurchaseDAO {
 		//System.out.println("DB에서 꺼내면 나오냐?"+map.get("totalCount"));
 		map.put("list", list);
 		System.out.println("listsize"+list.size());
+		
+		
 		
 		rs.close();
 		pStmt.close();
