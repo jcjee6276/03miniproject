@@ -28,12 +28,10 @@ public class AddPurchaseAction extends Action{
 		ProductService proservice = new ProductServiceImpl();
 		proservice.getProduct(prodNo);
 		pchase.setPurchaseProd(proservice.getProduct(prodNo));
-		System.out.println("+++++"+pchase.getPurchaseProd().getProdNo());
+		//System.out.println("+++++"+pchase.getPurchaseProd().getProdNo());
 		HttpSession session = request.getSession();
 		user = (User)session.getAttribute("user");
 		
-		
-		//System.out.println("======ttt"+pchaseVO.getPurchaseProd().getProdNo());
 		pchase.setBuyer(user);
 		pchase.setPaymentOption(request.getParameter("paymentOption"));
 		pchase.setReceiverName(user.getUserName());
@@ -45,6 +43,8 @@ public class AddPurchaseAction extends Action{
 
 		PurchaseService pservice = new PurchaseServiceImpl();
 		pservice.addPurchase(pchase);
+		
+		System.out.println("code »Æ¿Œ"+pchase.getTranCode());
 		
 		request.setAttribute("purcVO", pchase);
 		

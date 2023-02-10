@@ -17,23 +17,21 @@ import com.model2.mvc.service.user.UserService;
 import com.model2.mvc.service.user.impl.UserServiceImpl;
 import com.model2.mvc.framework.Action;
 
-public class GetPurchaseAction extends Action{
+public class UpdatePurchaseAction extends Action {
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
-		User user = new User();
 		int tranNo = Integer.parseInt(request.getParameter("tranNo"));
 		//System.out.println(tranNo);
 		
+		Purchase purchase = new Purchase();
+		purchase.setTranNo(tranNo);
+		purchase.setReceiverPhone(request.getParameter("receiverPhone"));
+		purchase.setDivyAddr(request.getParameter("receiverAddr"));
+		purchase.setDivyRequest(request.getParameter("receiverRequest"));
+		purchase.setDivyDate(request.getParameter("divyDate"));
 		
-		PurchaseService purservice = new PurchaseServiceImpl();
-		Purchase purchase = purservice.getPurchase(tranNo);
-		HttpSession session = request.getSession();
-		user = (User)session.getAttribute("user");
-		purchase.setBuyer(user);
-		System.out.println(purchase.getBuyer().getUserId());
-		request.setAttribute("pur", purchase);
+		PurchaseService service = new PurchaseServiceImpl();
+		service.updatePurchase(purchase);
 		
-		
-		return "forward:/purchase/getPurchase.jsp";
+		return "redirect:/getPurchase.do?tranNo="+tranNo;
 	}
 }

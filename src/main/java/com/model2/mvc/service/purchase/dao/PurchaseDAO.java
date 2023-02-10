@@ -29,6 +29,25 @@ public class PurchaseDAO {
 	public PurchaseDAO() {
 	}
 	
+	public void updateTranCode(Purchase purchase) throws Exception {
+		System.out.println("넘어온 code확인"+purchase.getTranCode());
+		
+		Connection con = DBUtil.getConnection();
+		String sql = "update (select * from transaction) set TRAN_STATUS_CODE=? WHERE TRAN_NO=?";
+		
+		PreparedStatement stmt = con.prepareStatement(sql);
+		
+		stmt.setString(1, purchase.getTranCode());
+		stmt.setInt(2, purchase.getTranNo());
+		stmt.executeUpdate();
+		
+		System.out.println("update에서 확인"+purchase.getTranNo());
+		System.out.println("update에서 확인2"+purchase);
+		stmt.close();
+		con.close();
+		
+	}
+	
 	public void insertPurchase(Purchase purchase) throws Exception{
 		Connection con = DBUtil.getConnection();
 		String sql = "insert into transaction (TRAN_NO,PROD_NO,buyer_id,payment_option,receiver_name,\r\n"
@@ -36,22 +55,8 @@ public class PurchaseDAO {
 		//System.out.println("prodNO가져오니"+purchase.getPurchaseProd().getProdNo());
 		System.out.println("userid가져오니"+purchase.getBuyer().getUserId());
 		
-		
-		System.out.println("=====db=========");
-		
-		//ProductVO productVO = new ProductVO();
-		
-		//UserVO userVO = null;
-		//UserService uservice = new UserServiceImpl();
-		//userVO = uservice.getUser("userId");
-		//ProductService proservice = new ProductServiceImpl();
-		//productVO = proservice.getProduct(productVO.getProdNo());
-		//PurchaseVO pchaseVO = new PurchaseVO(); 
-		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		
-		
-		
+
 		stmt.setInt(1, purchase.getPurchaseProd().getProdNo());
 		stmt.setString(2, purchase.getBuyer().getUserId());
 		stmt.setString(3, purchase.getPaymentOption());
@@ -62,45 +67,67 @@ public class PurchaseDAO {
 		stmt.setString(8, purchase.getDivyDate());
 		stmt.executeUpdate();
 		
+		
+		purchase.setTranCode("1");
+		this.updateTranCode(purchase);
+		
+		
 		con.close();
 		
 	}
 	public Purchase findPurchase(int tranNo) throws Exception{
-		/*Connection con = DBUtil.getConnection();
-		String sql = "select * from product where prod_No=?";
+		Connection con = DBUtil.getConnection();
+		
+		String sql ="select * from transaction where tran_no=?";
+		
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setInt(1, tranNo);
 		ResultSet rs = stmt.executeQuery();
-		
-		ProductVO productVO = null;
-		PurchaseVO purchaseVO = null;
-		UserVO userVO = new UserVO();
-		UserService service = new UserServiceImpl();
-		//userVO = service.getUser();
-		System.out.println(userVO);
+		Product product = new Product();
+		Purchase purchase = null;
 		
 		while(rs.next()) {
-			productVO = new ProductVO();
-			purchaseVO = new PurchaseVO();
-			//userVO = new UserVO();
-			UserService service2 = new UserServiceImpl();
-			userVO = service2.getUser(rs.getString("USER_ID"));
-			purchaseVO.setBuyer(userVO);
-			purchaseVO.setReceiverName(rs.getString("USER_NAME"));
-			
-			purchaseVO.setReceiverPhone(rs.getString("USER_PHONE"));
-			purchaseVO.setDivyAddr(rs.getString("ADDR"));
-			
+			purchase = new Purchase();
+			product = new Product();
+			product.setProdNo(rs.getInt("Prod_no"));
+			purchase.setTranNo(rs.getInt("tran_no"));
+			purchase.setPaymentOption(rs.getString("payment_option"));
+			purchase.setReceiverName(rs.getString("receiver_name"));
+			purchase.setReceiverPhone(rs.getString("receiver_phone"));
+			purchase.setDivyAddr(rs.getString("demailaddr"));
+			purchase.setDivyRequest(rs.getString("dlvy_request"));
+			purchase.setDivyDate(rs.getString("dlvy_date"));
+			purchase.setOrderDate(rs.getDate("order_data"));
+			purchase.setPurchaseProd(product);
 		}
+		System.out.println("purchase prodNo"+purchase.getPurchaseProd().getProdNo());
+		System.out.println("DAO Purchase는?"+purchase);
 		con.close();
-		//System.out.println(productVO.toString());
-		//purchaseVO.setPurchaseProd(productVO);
-		System.out.println(userVO);
-		System.out.println(purchaseVO);
+		stmt.close();
+		rs.close();
 		
+		return purchase;
+	}
+	
+	public Purchase updatePurchase(Purchase purchase) throws Exception {
+		Connection con = DBUtil.getConnection();
+		System.out.println("가져온 purchase"+purchase.getTranNo());
 		
-		//System.out.println("반반무마니:"+purchaseVO.getPurchaseProd());*/
-		return null;
+		//System.out.println(purchase.getTranNo());
+		String sql = "update transaction set RECEIVER_Phone=?, DEMAILADDR=?, DLVY_REQUEST=?, DLVY_DATE=? where tran_no=?";
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setString(1, purchase.getReceiverPhone());
+		stmt.setString(2, purchase.getDivyAddr());
+		stmt.setString(3, purchase.getDivyRequest());
+		stmt.setString(4, purchase.getDivyDate());
+		stmt.setInt(5, purchase.getTranNo());
+		stmt.executeUpdate();
+		
+		con.close();
+		stmt.close();
+		System.out.println("DB update"+purchase);
+		
+		return purchase;
 	}
 	
 	public Map<String, Object> getPurchaseList(Search search, String userId) throws Exception {
